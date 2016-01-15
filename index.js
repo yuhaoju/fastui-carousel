@@ -7,10 +7,9 @@ var Carousel  = React.createClass ({
     getInitialState() {
         var imgs = this.props.imgs
 
-        // copy first one to last, to make carousel effect
         imgs.push(imgs[0])
         imgs.unshift(imgs[imgs.length - 2])
-        // console.log(imgs);
+
         return {
             scrollOffset: screen_w,
             x0: 0,
@@ -30,7 +29,6 @@ var Carousel  = React.createClass ({
     },
     componentWillMount: function(){
         this._panResponder = PanResponder.create({
-            // Ask to be the responder:
             onStartShouldSetPanResponder: (evt, gestureState) => true,
             onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
             onMoveShouldSetPanResponder: (evt, gestureState) => true,
@@ -41,18 +39,10 @@ var Carousel  = React.createClass ({
             },
             onPanResponderMove: (evt, gestureState) => {
                 var xOffset = this.state.xOffset = this.state.x0 - gestureState.moveX
-                // console.log(xOffset);
-                this.refs.scrollView.scrollWithoutAnimationTo(0, this.state.scrollOffset + xOffset);
-
-                // The most recent move distance is gestureState.move{X,Y}
-
-                // The accumulated gesture distance since becoming responder is
-                // gestureState.d{x,y}
+                this.refs.scrollView.s
             },
             onPanResponderTerminationRequest: (evt, gestureState) => true,
             onPanResponderRelease: (evt, gestureState) => {
-                // The user has released all touches while this view is the
-                // responder. This typically means a gesture has succeeded
                 if(this.state.xOffset > 50){
                     this._next()
                 } else if(this.state.xOffset < -50){
@@ -77,7 +67,6 @@ var Carousel  = React.createClass ({
     },
 
     link: function(){
-        console.log("hehe");
     },
 
     render() {
@@ -101,12 +90,6 @@ var Carousel  = React.createClass ({
                         </TouchableOpacity>)
                     }
                 </ScrollView>
-                <TouchableOpacity style={styles.btn} onPress={this._next} activeOpacity={1}>
-                    <Text style={styles.btnText}>next</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.btn} onPress={this._last} activeOpacity={1}>
-                    <Text style={styles.btnText}>last</Text>
-                </TouchableOpacity>
             </View>
         )
     },
@@ -120,16 +103,6 @@ const styles = StyleSheet.create({
         width: screen_w,
         height: 200,
     },
-    btn: {
-        width: screen_w ,
-        paddingTop: 15,
-        paddingBottom: 15,
-        alignItems: "center",
-        backgroundColor: "#09c",
-    },
-    btnText: {
-        color: "#fff",
-    }
 })
 
 module.exports = Carousel
