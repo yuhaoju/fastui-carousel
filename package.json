@@ -1,0 +1,24 @@
+{
+  "name": "fastui-carousel",
+  "version": "0.0.1",
+  "description": "React Native轮播图组件",
+  "main": "index.js",
+  "scripts": {
+    "test": "\"echo \\\"Error: no test specified\\\" && exit 1\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/roscoe054/fastui-carousel.git"
+  },
+  "keywords": [
+    "carousel",
+    "react native"
+  ],
+  "author": "roscoe054",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/roscoe054/fastui-carousel/issues"
+  },
+  "homepage": "https://github.com/roscoe054/fastui-carousel",
+  "dependencies": {}
+}
