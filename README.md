@@ -65,3 +65,13 @@ const styles = StyleSheet.create({
 
 AppRegistry.registerComponent('CarouselDemo', () => CarouselDemo);
 ```
+
+## More Options
+```javascript
+showPagination = {true}
+paginationSize = {16}
+paginationSpace = {20}
+paginationBottomOffset = {50}
+paginationColor = '#fff'
+activePaginationColor = '#aaa'
+```
