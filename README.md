@@ -13,7 +13,7 @@ npm install fastui-carousel
 ```javascript
 'use strict';
 
-import React, {AppRegistry, Component, StyleSheet, Dimensions, Text, View, Image, StatusBarIOS} from 'react-native';
+import React, {AppRegistry, StyleSheet, Dimensions, View, Image, StatusBarIOS} from 'react-native';
 
 var Carousel = require('./fastui-carousel');
 
@@ -64,4 +64,14 @@ const styles = StyleSheet.create({
 });
 
 AppRegistry.registerComponent('CarouselDemo', () => CarouselDemo);
+```
+
+## More Options
+```javascript
+showPagination = {true}
+paginationSize = {16}
+paginationSpace = {20}
+paginationBottomOffset = {50}
+paginationColor = '#fff'
+activePaginationColor = '#aaa'
 ```
