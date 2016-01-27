@@ -1,10 +1,21 @@
 'use strict'
 
-import React, {StyleSheet, View, Image, Dimensions, TouchableOpacity, Text, PanResponder, ScrollView} from 'react-native';
+import React, {StyleSheet, View, Dimensions, TouchableOpacity, Text, PanResponder, ScrollView} from 'react-native';
 
 const screen_w = Dimensions.get('window').width;
 
 let Carousel  = React.createClass ({
+    propTypes: {
+        children: React.PropTypes.node.isRequired,
+        showPagination: React.PropTypes.bool,
+        paginationColor: React.PropTypes.string,
+        activePaginationColor: React.PropTypes.string,
+        paginationSize: React.PropTypes.number,
+        paginationSpace: React.PropTypes.number,
+        paginationBottomOffset: React.PropTypes.number,
+        style: View.propTypes.style,
+    },
+
     getDefaultProps() {
         return {
             showPagination: true,
@@ -25,7 +36,7 @@ let Carousel  = React.createClass ({
         };
     },
 
-    componentWillMount: function(){
+    componentWillMount() {
         this._panResponder = PanResponder.create({
             onStartShouldSetPanResponder: (evt, gestureState) => true,
             onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
@@ -87,7 +98,7 @@ let Carousel  = React.createClass ({
     },
 
     renderPagination() {
-        if (!this.props.showPagination) {
+        if (!this.props.showPagination || !this.props.children) {
             return null;
         }
 
