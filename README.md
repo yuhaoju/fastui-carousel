@@ -6,7 +6,7 @@ react-native轮播图组件
 
 ## Install
 ```
-npm install fastui-form
+npm install fastui-carousel
 ```
 
 ## Example
