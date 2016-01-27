@@ -13,7 +13,7 @@ npm install fastui-carousel
 ```javascript
 'use strict';
 
-import React, {AppRegistry, Component, StyleSheet, Dimensions, Text, View, Image, StatusBarIOS} from 'react-native';
+import React, {AppRegistry, StyleSheet, Dimensions, View, Image, StatusBarIOS} from 'react-native';
 
 var Carousel = require('./fastui-carousel');
 
