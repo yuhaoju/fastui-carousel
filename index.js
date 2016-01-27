@@ -2,31 +2,29 @@
 
 import React, {StyleSheet, View, Image, Dimensions, TouchableOpacity, Text, PanResponder, ScrollView} from 'react-native';
 
-var screen_w = Dimensions.get('window').width;
-var Carousel  = React.createClass ({
-    getInitialState() {
-        var imgs = this.props.imgs
+const screen_w = Dimensions.get('window').width;
 
-        imgs.push(imgs[0])
-        imgs.unshift(imgs[imgs.length - 2])
-
+let Carousel  = React.createClass ({
+    getDefaultProps() {
         return {
-            scrollOffset: screen_w,
+            showPagination: true,
+            paginationColor: '#fff',
+            activePaginationColor: '#aaa',
+            paginationSize: 16,
+            paginationSpace: 20,
+            paginationBottomOffset: 50,
+        };
+    },
+
+    getInitialState() {
+        return {
+            activePage: 0,
+            scrollerOffset: 0,
             x0: 0,
             xOffset: 0,
         };
     },
-    getDefaultProps() {
-        return {}
-    },
-    _next() {
-        this.state.scrollOffset = this.state.scrollOffset + screen_w
-        this.refs.scrollView.scrollTo(0, this.state.scrollOffset)
-    },
-    _last() {
-        this.state.scrollOffset = this.state.scrollOffset - screen_w
-        this.refs.scrollView.scrollTo(0, this.state.scrollOffset)
-    },
+
     componentWillMount: function(){
         this._panResponder = PanResponder.create({
             onStartShouldSetPanResponder: (evt, gestureState) => true,
@@ -34,39 +32,89 @@ var Carousel  = React.createClass ({
             onMoveShouldSetPanResponder: (evt, gestureState) => true,
             onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
 
+            // get move start position
             onPanResponderGrant: (evt, gestureState) => {
                 this.state.x0 = gestureState.x0
             },
+
+            // get move offset
             onPanResponderMove: (evt, gestureState) => {
-                var xOffset = this.state.xOffset = this.state.x0 - gestureState.moveX
-                this.refs.scrollView.s
+                const xOffset = this.state.x0 - gestureState.moveX,
+                    notLeftmost = this.state.scrollerOffset + xOffset > 0,
+                    notRightmost = this.state.scrollerOffset + xOffset < 640
+
+                if(notLeftmost && notRightmost){
+                    this.state.xOffset = xOffset
+                } else{
+                    this.state.xOffset = 0
+                }
             },
-            onPanResponderTerminationRequest: (evt, gestureState) => true,
+
+            // decide which page to scroll to
             onPanResponderRelease: (evt, gestureState) => {
-                if(this.state.xOffset > 50){
-                    this._next()
-                } else if(this.state.xOffset < -50){
-                    this._last()
+                const threshold = 50
+                if(this.state.xOffset > threshold) {
+                    this.scrollToNext()
+                } else if(this.state.xOffset < -threshold) {
+                    this.scrollToPrev()
+                } else {
+                    this.reposition()
                 }
             },
         });
     },
 
-    scrollEnd: function() {
-        // when get last picture, reset scroller to 0
-        if(this.state.scrollOffset >= screen_w * (this.props.imgs.length - 2)){
-            this.state.scrollOffset = 0
-            this.refs.scrollView.scrollWithoutAnimationTo(0, 0);
-        }
+    scrollToNext() {
+        this.state.scrollerOffset = this.state.scrollerOffset + screen_w
+        this.refs.scrollView.scrollTo(0, this.state.scrollerOffset)
 
-        // when get first picture, reset scroller to end
-        else if(this.state.scrollOffset === 0){
-            this.state.scrollOffset = screen_w * (this.props.imgs.length - 2)
-            this.refs.scrollView.scrollWithoutAnimationTo(0, this.state.scrollOffset);
-        }
+        this.setState({
+            activePage: this.state.activePage + 1
+        })
     },
 
-    link: function(){
+    scrollToPrev() {
+        this.state.scrollerOffset = this.state.scrollerOffset - screen_w
+        this.refs.scrollView.scrollTo(0, this.state.scrollerOffset)
+
+        this.setState({
+            activePage: this.state.activePage - 1
+        })
+    },
+
+    reposition() {
+        this.refs.scrollView.scrollTo(0, this.state.scrollerOffset)
+    },
+
+    renderPagination() {
+        if (!this.props.showPagination) {
+            return null;
+        }
+
+        let paginations = [],
+            position = {
+                width: this.props.children.length * this.props.paginationSpace,
+                bottom: this.props.paginationBottomOffset,
+            }
+
+        position.left = (screen_w - position.width) / 2
+
+        for (let i = 0, len = this.props.children.length; i < len; i++) {
+            const paginationStyle = i === this.state.activePage
+                                    ? { color: this.props.paginationColor }
+                                    : { color: this.props.activePaginationColor }
+            paginations.push(
+                <Text key={i} style={[paginationStyle, { fontSize: this.props.paginationSize }]}>
+                    &bull;
+                </Text>
+            )
+        }
+
+        return (
+            <View style={[styles.pagePagination, position]}>
+                {paginations}
+            </View>
+        )
     },
 
     render() {
@@ -74,34 +122,40 @@ var Carousel  = React.createClass ({
             <View style={styles.opeWrap}>
                 <ScrollView
                     ref="scrollView"
+                    bounces={false}
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
-                    bounces={false}
                     automaticallyAdjustContentInsets={false}
                     onMomentumScrollEnd={this.scrollEnd}
-                    scrollEventThrottle={200}
+                    contentContainerStyle={styles.container}
                     {...this._panResponder.panHandlers}
-                    contentOffset={{y:0, x: screen_w}}
-                    style={styles.scrollView}
-                    >
-                    {this.props.imgs.map((uri, i) =>
-                        <TouchableOpacity key={i} onPress={this.link} activeOpacity={1}>
-                            <Image style={styles.img} source={{uri: uri}}/>
-                        </TouchableOpacity>)
-                    }
+                >
+                    {this.props.children}
                 </ScrollView>
+                {this.renderPagination()}
             </View>
         )
     },
-    getValue() {
-        return this.state.value
-    }
 })
 
 const styles = StyleSheet.create({
-    img: {
-        width: screen_w,
-        height: 200,
+    opeWrap: {
+        flex: 1,
+        alignItems: 'stretch',
+    },
+    container: {
+        flex: 1,
+        alignItems: 'stretch',
+    },
+    pagePagination: {
+        position: 'absolute',
+        flexDirection: 'row',
+        flex: 1,
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        alignSelf: 'stretch',
+        opacity: 0.8,
+        backgroundColor: 'transparent',
     },
 })
 
