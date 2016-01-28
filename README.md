@@ -1,5 +1,5 @@
 # fastui-carousel
-react-native轮播图组件
+react-native carousel component
 
 ## Demo
 ![](https://raw.githubusercontent.com/roscoe054/fastui-carousel/master/demo.gif)
