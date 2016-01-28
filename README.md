@@ -1,5 +1,5 @@
 # fastui-carousel
-A carousel component built with react native . **The components list as seen in [fastui](https://github.com/RubyLouvre/fastui).**
+A carousel component built with react native . **All components as seen in [fastui](https://github.com/RubyLouvre/fastui).**
 
 ## Demo
 ![](https://raw.githubusercontent.com/roscoe054/fastui-carousel/master/demo.gif)
