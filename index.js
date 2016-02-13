@@ -53,7 +53,7 @@ let Carousel  = React.createClass ({
                 const childrenNum = this.props.children.length,
                     xOffset = this.state.x0 - gestureState.moveX,
                     notLeftmost = this.state.scrollerOffset + xOffset > 0,
-                    notRightmost = this.state.scrollerOffset + xOffset < screen_w * childrenNum
+                    notRightmost = this.state.scrollerOffset + xOffset < screen_w * (childrenNum - 1)
 
                 if(notLeftmost && notRightmost){
                     this.state.xOffset = xOffset

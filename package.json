@@ -1,6 +1,6 @@
 {
   "name": "fastui-carousel",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Carousel component built with React Native",
   "main": "index.js",
   "scripts": {
