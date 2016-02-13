@@ -1,5 +1,5 @@
 # fastui-carousel
-react-native轮播图组件
+A carousel component built with React Native . **All components as seen in [fastui](https://github.com/roscoe054/fastui).**
 
 ## Demo
 ![](https://raw.githubusercontent.com/roscoe054/fastui-carousel/master/demo.gif)
